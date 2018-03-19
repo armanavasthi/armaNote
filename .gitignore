@@ -8,7 +8,7 @@ target/
 .project
 .settings
 .springBeans
-src/main/resources/application.properties
+/src/main/resources/application.properties
 
 ### IntelliJ IDEA ###
 .idea
