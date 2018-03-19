@@ -1,0 +1,25 @@
+Note: application.properties file is also called "conf" in this text file.
+step1: created basic app from spring boot initializr
+2: in application.properties file, added serverport, datasource and jpa configurations.
+3: created WEB-INF folder then inside it /jsp/index.jsp
+3: created WelcomeController, 
+	(i.)showWelcomePage(): in normal mvc project we return ModelAndView object, by telling suffix, prefix in viewresolver
+							but in spring boot we can configure suffix and prefix in application.properties, that we did
+							by adding mvc configurations. Now try to access localhost:6060/ will show index.jsp.
+							Its important to note that jsp file (in tomcat server) can be used by using jasper dependency.
+							I added it manually in pom.xml.
+	(ii.)Then I tried to change jsp to html in mvc dependency inside application.properties. But it didn't work as the
+		 spring boot was throwing type (which is html here) not found 404 error. It turns out (though not sure and still
+		 I do not believe it) that spring boot asks us to keep all our static files (like html, css, js) in resources
+		 folder and it looks for html files in templates folder. So I created index.html inside templates folder. 
+		 And for static file, we need to return ModelAndView object only (with file name), so I created below function.
+	(iii.)showWelcomeHtmlPage(): This function is returning ModelAndView but now the issues are two folds. If (in 
+		  conf) we write the suffix prefix as our inde.jsp's path then from ModelAndView also, it takes name as index 
+		  and shows that jsp file. If I remove mvc configuration from conf then it gives type not found error. What 
+		  we want though is: 1. If I return ModelAndView page then it should by default consider static area and take 
+		  my html file. 2. If Simple string is returned (like we did in previous eg) then it should give use the 
+		  view resolver suffix, prefix configurations and go to file accordingly. 
+		  For this thing, we have to add another dependency named "thymeleaf". After adding it everything worked fine.
+		
+		
+		
