@@ -95,6 +95,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Value("${spring.queries.users-query}")
 	private String userQuery;
 	
+	@Value("${spring.queries.users-by-username-query}")
+	private String usernameQuery;
+	
 	@Value("${spring.queries.roles-query}")
 	private String rolesQuery;
 	
@@ -105,6 +108,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.authoritiesByUsernameQuery(rolesQuery)
 				.dataSource(dataSource)
 				.passwordEncoder(bCryptPasswordEncoder);
+		
+		
+		// this is just a trick to login trough username. But not the correct way. (Change it later)
+		// Better to customize userDetailsService's loadUserByUsername(String username) method.
+		// means, create own class, extend with userDetailsServiceImpl, then override loadUserByUsername method to get user by using both email and username
+		// https://stackoverflow.com/questions/14122756/spring-security-using-both-username-or-email
+		auth.jdbcAuthentication()
+		.usersByUsernameQuery(usernameQuery)
+		.authoritiesByUsernameQuery(rolesQuery)
+		.dataSource(dataSource)
+		.passwordEncoder(bCryptPasswordEncoder);
 	}
 	
 	public void configure(HttpSecurity http) throws Exception {

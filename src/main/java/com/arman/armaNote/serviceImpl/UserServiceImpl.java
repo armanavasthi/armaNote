@@ -5,6 +5,9 @@ import java.util.HashSet;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -44,5 +47,18 @@ public class UserServiceImpl implements UserService {
 	
 	public List<User> getAllUsers(){
 		return userRepository.findAll();
+	}
+	
+	// below code is taken from http://www.baeldung.com/get-user-in-spring-security
+	// there are other nice ways to get current user given in the link above. Please do read.
+	@Override
+	public String getCurrentUsername() {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String currentUserName = null;
+		if (!(authentication instanceof AnonymousAuthenticationToken)) {
+		    currentUserName = authentication.getName();
+		    System.out.println(currentUserName);
+		}
+		return currentUserName;  // note that currently it is returning email, bcz of our security setup.
 	}
 }
