@@ -1,1 +1,14 @@
-this is user home
+<!DOCTYPE html>
+<html xmlns:th="http://thymeleaf.org">
+<head>
+	<div th:replace="components/header :: header-css"/>
+	<div th:replace="components/header :: header-js"/>
+	<script src="/js/userHome.js"></script>
+</head>
+<body>
+	<div th:replace="components/header :: header"></div>
+	<div class="container">
+		
+	</div>
+	<div th:replace="components/footer :: footer"></div>
+</body>

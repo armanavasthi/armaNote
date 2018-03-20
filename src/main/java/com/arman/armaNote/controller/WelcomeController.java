@@ -20,7 +20,7 @@ public class WelcomeController {
 	
 	@RequestMapping(value="/", method=RequestMethod.GET)
 	public String showWelcomePage() {
-		return "main";
+		return "home";
 	}
 	
 	@RequestMapping(value="/admin/home", method=RequestMethod.GET)

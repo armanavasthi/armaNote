@@ -2,16 +2,31 @@
 <html xmlns:th="http://thymeleaf.org">
 <head>
 	<title>ArmaNote</title>
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-  	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-  	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-  	
-  	<link rel="stylesheet" th:href="@{/css/main.css}"/>
-  	<script src="/js/main.js"></script>
+	
+	<div th:fragment="header-css">
+        <!-- this is header-css -->
+        <link rel="stylesheet" type="text/css"
+              href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+		<!-- <link rel="stylesheet" href="/css/main.css"> --> <!-- this is also working, other way is below -->
+  		<!-- read https://stackoverflow.com/questions/45536972/how-add-css-and-js-to-spring-boot-application/45537528
+  		and https://stackoverflow.com/questions/27170772/where-place-static-css-file-in-a-spring-boot-project 
+  		to understand how to get css and js in spring boot -->
+        <link rel="stylesheet" th:href="@{/css/main.css}" />
+    </div>
+    
+    <div th:fragment="header-js">
+        <!-- this is header-js -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  		<script src="/js/main.js"></script>
+    </div>
+	
 </head>
 <body>
 	<div th:fragment="header">
-		<nav class="navbar">Arman avasthi</nav>
+		<nav class="navbar">
+			<h4>Arman Avasthi</h4>
+		</nav>
 	</div>
 </body>
 </html>

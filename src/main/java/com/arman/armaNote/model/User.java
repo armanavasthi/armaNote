@@ -37,7 +37,7 @@ public class User implements Serializable{
 	@Column(name = "user_id")
 	private Long id;
 	
-	@Column(nullable=false, unique=true)
+	@Column(nullable=false, unique=true, updatable=false)
 	private String username;
 	
 	@Transient // see the note below
@@ -77,6 +77,7 @@ public class User implements Serializable{
 	@Column(name="updated_on", nullable=false)
 	@Temporal(TemporalType.TIMESTAMP)
 	@LastModifiedDate // change it later, implement logic to updated it on user's last login
+	//https://stackoverflow.com/questions/27956134/spring-security-update-last-login-date-on-authentication-success
 	private Date lastLogin = new Date();
 
 	public Long getId() {

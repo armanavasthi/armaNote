@@ -1,8 +1,6 @@
-p{
-	background-color: red;
-}
 nav{
 	background-color: orange;
+	text-align: center;
 }
 .form-ele{
 	overflow:hidden;
@@ -30,3 +28,24 @@ nav{
 	height:30px;	/* Height of the footer */
 	background:orange;
 }
+.noLeftPadding{
+	padding-left:0!important;
+}
+.urlDiv{
+	padding-left:25px;
+}
+.urlLabelDiv{
+	padding-right:0px;
+}
+.urlLabelDiv label{
+	margin-top: 10px;
+}
+.goToButton{
+	padding-left: 0px;
+    padding-right: 7px;
+}
+
+
+
+
+

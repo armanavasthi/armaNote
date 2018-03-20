@@ -15,10 +15,12 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotBlank;
 
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
+import org.hibernate.annotations.Type;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
@@ -26,7 +28,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
-@Table(name="note")
+@Table(name="note", uniqueConstraints = @UniqueConstraint(columnNames = { "title", "user_id" }))
 @EntityListeners(EnableJpaAuditing.class)
 @JsonIgnoreProperties(value={"createdAt", "updatedAt"})
 public class Note implements Serializable {
@@ -86,6 +88,8 @@ public class Note implements Serializable {
 	private String title;
 	
 	@NotBlank
+	//@Type(type="text") // this annotation and the below one work same, but this one is from hibernate and below is from spring data jpa
+	@Column(name="content", columnDefinition = "TEXT")
 	private String content;
 	
 	@Column(name="created_on", nullable=false, updatable=false)

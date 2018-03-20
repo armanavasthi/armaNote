@@ -1,41 +1,27 @@
 <!DOCTYPE html>
 <html xmlns:th="http://thymeleaf.org">
 <head>
-	<title>ArmaNote</title>
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-  	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-  	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-  	
-  	<!-- <link rel="stylesheet" href="/css/main.css"> --> <!-- this is also working, other way is below -->
-  	<!-- read https://stackoverflow.com/questions/45536972/how-add-css-and-js-to-spring-boot-application/45537528
-  	and https://stackoverflow.com/questions/27170772/where-place-static-css-file-in-a-spring-boot-project 
-  	to understand how to get css and js in spring boot -->
-  	<link rel="stylesheet" th:href="@{/css/main.css}"/>
-  	<script src="/js/main.js"></script>
+	<div th:replace="components/header :: header-css"/>
+	<div th:replace="components/header :: header-js"/>
 </head>
 <body>
 	<div th:replace="components/header :: header"></div>
 	<div class="container">
         <form>
             <div>
-                <div class="col-md-2"><label for="title-label">Input URL</label></div>
-                <div class="col-md-10"><input class="form-control" id="input-url" type="text" placeholder="Input the URL of page you want to read"/></div>
+                <div class="col-md-1 urlLabelDiv"><label for="title-label">Input URL</label></div>
+                <div class="col-md-11 urlDiv"><input class="form-control" id="input-url" type="text" placeholder="Input the URL of page you want to read"/></div>
             </div>
-            <!-- <div class="form-group">
-                <label for="">Fill Url</label>
-                <input type="text" class="form-control" id="input-url" placeholder="Input field">
-            </div> -->
-
             <button type="submit" class="btn btn-primary" style="display: none;">Submit</button>
         </form>
 		<iframe height="300px" width="100%" src="#" name="iframe_a" frameborder="0" id="iframeView" style="display: none;" allowfullscreen></iframe>
-        <!-- https websites are not working bcz of same origin issue. Wee how to solve it  -->
+        <!-- https websites are not working bcz of same origin issue. See how to solve it  -->
         <div class="col-md-6 col-xs-8 row-fluid pull-right">
             <div class="pull-right">
                 <a href="#" class="btn btn-info" role="button" target="iframe_a" id="urlButton" style="display: none;">Add URL</a>
             </div>
         </div>
-        <div class="col-md-6 col-xs-8 row-fluid">
+        <div class="col-md-6 col-xs-8 row-fluid noLeftPadding">
             <form class="form">
                     <div class="form-ele">
                         <div class="col-md-2"><label for="title-label">Title</label></div>

@@ -57,7 +57,6 @@ public class UserServiceImpl implements UserService {
 		String currentUserName = null;
 		if (!(authentication instanceof AnonymousAuthenticationToken)) {
 		    currentUserName = authentication.getName();
-		    System.out.println(currentUserName);
 		}
 		return currentUserName;  // note that currently it is returning email, bcz of our security setup.
 	}

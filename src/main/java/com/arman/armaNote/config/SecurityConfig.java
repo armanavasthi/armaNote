@@ -130,7 +130,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers("/login").permitAll()
 				.antMatchers("/registration").permitAll()
 				.antMatchers("/admin/**").hasAuthority("ADMIN")
-				.antMatchers("/webservice/**").hasAuthority("WEBSERVICE")
+				.antMatchers("/user/**").hasAnyAuthority("ADMIN","USER")
+				.antMatchers("/webservice/**").hasAnyAuthority("ADMIN","WEBSERVICE","USER") // gave rights to user also so that we can make webservice calls from ajax
 				.anyRequest().authenticated()
 				.and().csrf().disable()
 				.formLogin().loginPage("/login")
