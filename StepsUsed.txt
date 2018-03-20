@@ -20,6 +20,4 @@ step1: created basic app from spring boot initializr
 		  my html file. 2. If Simple string is returned (like we did in previous eg) then it should give use the 
 		  view resolver suffix, prefix configurations and go to file accordingly. 
 		  For this thing, we have to add another dependency named "thymeleaf". After adding it everything worked fine.
-		
-		
-		
+			
