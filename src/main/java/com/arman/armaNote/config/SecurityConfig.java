@@ -142,7 +142,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.and().logout()
 				.logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
 				.logoutSuccessUrl("/").and().exceptionHandling()
-				.accessDeniedPage("/access-denied");
+				.accessDeniedPage("/access-denied")
+				.and()
+				.headers().frameOptions().sameOrigin(); // this last line is added bcz otherwise I was getting "X-frame-option set to deny" error in iframe. So I followed: https://docs.spring.io/spring-security/site/docs/current/reference/html/headers.html
 	}
     
     @Override
