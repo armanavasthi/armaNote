@@ -32,6 +32,31 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @EntityListeners(EnableJpaAuditing.class)
 @JsonIgnoreProperties(value={"createdAt", "updatedAt"})
 public class Note implements Serializable {
+	@Id
+	@GeneratedValue(strategy=GenerationType.AUTO)
+	private Long id;
+	
+	private String title;
+	
+	@NotBlank
+	//@Type(type="text") // this annotation and the below one work same, but this one is from hibernate and below is from spring data jpa
+	@Column(name="content", columnDefinition = "TEXT")
+	private String content;
+	
+	@Column(name="created_on", nullable=false, updatable=false)
+	@Temporal(TemporalType.TIMESTAMP)
+	@CreatedDate
+	private Date createdOn;
+	
+	@Column(name="updated_on", nullable=false)
+	@Temporal(TemporalType.TIMESTAMP)
+	@LastModifiedDate
+	private Date updatedAt;
+	
+	@ManyToOne(optional=false)
+	@JoinColumn(name="user_id", nullable=false, foreignKey = @ForeignKey(name = "FK_NOTE_USER"))
+	@Cascade({CascadeType.ALL})
+	private User user;
 	
 	public Long getId() {
 		return id;
@@ -80,30 +105,4 @@ public class Note implements Serializable {
 	public void setUser(User user) {
 		this.user = user;
 	}
-
-	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
-	private Long id;
-	
-	private String title;
-	
-	@NotBlank
-	//@Type(type="text") // this annotation and the below one work same, but this one is from hibernate and below is from spring data jpa
-	@Column(name="content", columnDefinition = "TEXT")
-	private String content;
-	
-	@Column(name="created_on", nullable=false, updatable=false)
-	@Temporal(TemporalType.TIMESTAMP)
-	@CreatedDate
-	private Date createdOn;
-	
-	@Column(name="updated_on", nullable=false)
-	@Temporal(TemporalType.TIMESTAMP)
-	@LastModifiedDate
-	private Date updatedAt;
-	
-	@ManyToOne(optional=false)
-	@JoinColumn(name="user_id", nullable=false, foreignKey = @ForeignKey(name = "FK_NOTE_USER"))
-	@Cascade({CascadeType.ALL})
-	private User user;
 }
