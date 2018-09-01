@@ -67,6 +67,7 @@ public class User implements Serializable{
 	@JoinTable(name="user_role",
 				joinColumns = @JoinColumn(name="user_id"),
 				inverseJoinColumns = @JoinColumn(name = "role_id")) // doubt : what if i want to keep my user and role table's id column as 'id' only, and not 'user_id', 'role_id'
+													// check if this link helps: https://stackoverflow.com/questions/15037802/hibernate-manytomany-same-joincolumn-name
 	private Set<Role> roles;
 	
 	@Column(name="created_on", nullable=false, updatable=false)

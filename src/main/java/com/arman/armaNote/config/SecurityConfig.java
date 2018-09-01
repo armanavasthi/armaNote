@@ -6,12 +6,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.session.SessionManagementFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -92,6 +96,24 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Autowired
 	private DataSource dataSource;
 	
+	@Bean
+	CorsFilter corsFilter() {
+		CorsFilter filter = new CorsFilter();
+	    return filter;
+	}
+	 
+	@Bean
+    public JwtAuthenticationFilter authenticationTokenFilterBean() throws Exception {
+        return new JwtAuthenticationFilter();
+    }
+	
+	
+	//https://stackoverflow.com/questions/37970709/could-not-autowire-field-private-org-springframework-security-authentication-au
+	@Bean
+	public AuthenticationManager customAuthenticationManager() throws Exception {
+	  return authenticationManager();
+	}
+	
 	@Value("${spring.queries.users-query}")
 	private String userQuery;
 	
@@ -100,6 +122,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	@Value("${spring.queries.roles-query}")
 	private String rolesQuery;
+	
+	@Autowired
+    private JwtAuthenticationEntryPoint unauthorizedHandler;
 	
 	@Override
 	public void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -125,14 +150,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		http
 		.httpBasic()
 		.and()
-		.authorizeRequests()
+		.addFilterBefore(corsFilter(), SessionManagementFilter.class) //adds your custom CorsFilter
+        .authorizeRequests()
 				.antMatchers("/").permitAll()
-				.antMatchers("/login").permitAll()
+				.antMatchers("/token/*", "/login").permitAll()
 				.antMatchers("/registration").permitAll()
+				//.antMatchers("/webservice/**").permitAll()
+				.antMatchers("/webservice/**").hasAnyAuthority("ADMIN","WEBSERVICE","USER") // gave rights to user also so that we can make webservice calls from ajax
 				.antMatchers("/admin/**").hasAuthority("ADMIN")
 				.antMatchers("/user/**").hasAnyAuthority("ADMIN","USER")
-				.antMatchers("/webservice/**").hasAnyAuthority("ADMIN","WEBSERVICE","USER") // gave rights to user also so that we can make webservice calls from ajax
 				.anyRequest().authenticated()
+				.and()
+                .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 				.and().csrf().disable()
 				.formLogin().loginPage("/login")
 				.failureUrl("/login?error=true")
@@ -145,6 +175,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.accessDeniedPage("/access-denied")
 				.and()
 				.headers().frameOptions().sameOrigin(); // this last line is added bcz otherwise I was getting "X-frame-option set to deny" error in iframe. So I followed: https://docs.spring.io/spring-security/site/docs/current/reference/html/headers.html
+		
+		http
+        .addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class);
 	}
     
     @Override
@@ -160,6 +193,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     	BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
     	return bCryptPasswordEncoder;
     }
+    
+    // to see spring-angular integration, go through: http://javasampleapproach.com/java-integration/integrate-angular-4-springboot-web-app-springtoolsuite
     
     // to implement jwt, go through https://medium.com/@nydiarra/secure-a-spring-boot-rest-api-with-json-web-token-reference-to-angular-integration-e57a25806c50
     
