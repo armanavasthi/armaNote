@@ -29,8 +29,8 @@ public class UserServiceImpl implements UserService {
 	@Autowired
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
 	
-	public User findUserByEmail(String email) {
-		return userRepository.findByEmail(email);
+	public User findUserByUsernameOrEmail(String email) {
+		return userRepository.findByUsernameOrEmail(email);
 	}
 	
 	public void saveUser(User user) {
@@ -59,5 +59,9 @@ public class UserServiceImpl implements UserService {
 		    currentUserName = authentication.getName();
 		}
 		return currentUserName;  // note that currently it is returning email, bcz of our security setup.
+	}
+	
+	public String getUserRole(String email) {
+		return userRepository.findUserRole(email);
 	}
 }

@@ -49,7 +49,8 @@ public class WelcomeController {
 	@RequestMapping(value="/registration", method=RequestMethod.POST)
 	public ModelAndView saveRegistrationInfo(@Valid User user, BindingResult bindingResult) { // @RequestBody doesn't work here.
 		ModelAndView mav = new ModelAndView();
-		User userExists = userService.findUserByEmail(user.getEmail());
+		// User userExists = userService.findUserByEmail(user.getEmail());
+		User userExists = userService.findUserByUsernameOrEmail(user.getEmail());
 		if (userExists != null) {
 			bindingResult.rejectValue("email", "error.user", "There is already a registered user with this email");
 		}
